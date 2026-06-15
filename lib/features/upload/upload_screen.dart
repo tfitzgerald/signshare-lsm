@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart' as fp;
 import 'package:flutter/material.dart';
 
 import '../../core/routes/app_routes.dart';
@@ -35,37 +35,37 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   Future<void> _pickVideo() async {
-    try {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.video,
-        allowMultiple: false,
-        withData: false,
-      );
+	  try {
+		final result = await fp.FilePicker.pickFiles(
+		  type: fp.FileType.video,
+		  allowMultiple: false,
+		  withData: false,
+		);
 
-      if (!mounted || result == null) {
-        return;
-      }
+		if (!mounted || result == null) {
+		  return;
+		}
 
-      final pickedFile = result.files.single;
-      final pickedPath = pickedFile.path;
+		final pickedFile = result.files.single;
+		final pickedPath = pickedFile.path;
 
-      if (pickedPath == null || pickedPath.isEmpty) {
-        _showMessage('Could not read the selected video path.');
-        return;
-      }
+		if (pickedPath == null || pickedPath.isEmpty) {
+		  _showMessage('Could not read the selected video path.');
+		  return;
+		}
 
-      setState(() {
-        _selectedVideoPath = pickedPath;
-        _selectedVideoName = pickedFile.name;
-      });
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
+		setState(() {
+		  _selectedVideoPath = pickedPath;
+		  _selectedVideoName = pickedFile.name;
+		});
+	  } catch (error) {
+		if (!mounted) {
+		  return;
+		}
 
-      _showMessage('Could not select video: $error');
-    }
-  }
+		_showMessage('Could not select video: $error');
+	  }
+	}
 
   Future<void> _saveSign() async {
     FocusScope.of(context).unfocus();
