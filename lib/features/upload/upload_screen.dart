@@ -1,4 +1,4 @@
-import 'package:file_picker/file_picker.dart' as fp;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/routes/app_routes.dart';
@@ -34,29 +34,21 @@ class _UploadScreenState extends State<UploadScreen> {
     super.dispose();
   }
 
-  Future<void> _pickVideo() async {
+	Future<void> _pickVideo() async {
 	  try {
-		final result = await fp.FilePicker.pickFiles(
-		  type: fp.FileType.video,
-		  allowMultiple: false,
-		  withData: false,
+		final picker = ImagePicker();
+
+		final pickedVideo = await picker.pickVideo(
+		  source: ImageSource.gallery,
 		);
 
-		if (!mounted || result == null) {
-		  return;
-		}
-
-		final pickedFile = result.files.single;
-		final pickedPath = pickedFile.path;
-
-		if (pickedPath == null || pickedPath.isEmpty) {
-		  _showMessage('Could not read the selected video path.');
+		if (!mounted || pickedVideo == null) {
 		  return;
 		}
 
 		setState(() {
-		  _selectedVideoPath = pickedPath;
-		  _selectedVideoName = pickedFile.name;
+		  _selectedVideoPath = pickedVideo.path;
+		  _selectedVideoName = pickedVideo.name;
 		});
 	  } catch (error) {
 		if (!mounted) {
