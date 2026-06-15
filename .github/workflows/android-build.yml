@@ -36,6 +36,26 @@ jobs:
       - name: Generate Android platform files
         run: flutter create --platforms=android --org com.signshare --project-name signshare_lsm .
 
+      - name: Set generated Android compile SDK
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("android/gradle.properties")
+          key = "flutter.compileSdkVersion="
+          value = f"{key}36"
+
+          lines = path.read_text().splitlines()
+          for index, line in enumerate(lines):
+              if line.startswith(key):
+                  lines[index] = value
+                  break
+          else:
+              lines.append(value)
+
+          path.write_text("\n".join(lines) + "\n")
+          PY
+
       - name: Get dependencies again after Android generation
         run: flutter pub get
 
